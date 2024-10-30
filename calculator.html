@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equity Share Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            letter-spacing: -0.03em;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .calculator {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e1e1;
+            border-radius: 6px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .result {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .result-text {
+            font-size: 1.25rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .result-description {
+            color: #666;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .error {
+            color: #dc2626;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .note {
+            font-size: 0.875rem;
+            color: #666;
+            margin-top: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <h1>Shook Equity Share Calculator</h1>
+        
+        <div class="input-group">
+            <label for="totalShares">Total Company Shares:</label>
+            <input type="number" id="totalShares" value="145540" min="1">
+            <div class="note">Default: 145,540 shares</div>
+            <div class="error" id="totalSharesError">Please enter a valid number of shares</div>
+        </div>
+
+        <div class="input-group">
+            <label for="yourShares">Your Shares:</label>
+            <input type="number" id="yourShares" placeholder="Enter your number of shares" min="0">
+            <div class="error" id="yourSharesError">Please enter a valid number of shares</div>
+        </div>
+
+        <div class="result">
+            <div class="result-text" id="result">0.000%</div>
+            <div class="result-description">of total amount of shares</div>
+        </div>
+    </div>
+
+    <script>
+        const totalSharesInput = document.getElementById('totalShares');
+        const yourSharesInput = document.getElementById('yourShares');
+        const resultDiv = document.getElementById('result');
+        const totalSharesError = document.getElementById('totalSharesError');
+        const yourSharesError = document.getElementById('yourSharesError');
+
+        function calculatePercentage() {
+            const totalShares = parseFloat(totalSharesInput.value);
+            const yourShares = parseFloat(yourSharesInput.value);
+            
+            // Reset errors
+            totalSharesError.style.display = 'none';
+            yourSharesError.style.display = 'none';
+            
+            // Validate inputs
+            if (!totalShares || totalShares <= 0) {
+                totalSharesError.style.display = 'block';
+                resultDiv.textContent = '0.000%';
+                return;
+            }
+            
+            if (!yourShares || yourShares < 0) {
+                yourSharesError.style.display = 'block';
+                resultDiv.textContent = '0.000%';
+                return;
+            }
+            
+            if (yourShares > totalShares) {
+                yourSharesError.textContent = 'Your shares cannot exceed total shares';
+                yourSharesError.style.display = 'block';
+                resultDiv.textContent = '0.000%';
+                return;
+            }
+
+            const percentage = (yourShares / totalShares) * 100;
+            resultDiv.textContent = percentage.toFixed(3) + '%';
+        }
+
+        totalSharesInput.addEventListener('input', calculatePercentage);
+        yourSharesInput.addEventListener('input', calculatePercentage);
+
+        // Calculate initial percentage when page loads
+        calculatePercentage();
+    </script>
+</body>
+</html>
